@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 export interface ToyActionsAndState {
   currentImageSrc: string;
   setCurrentImageSrc: React.Dispatch<React.SetStateAction<string>>;
-  playSound: (soundSrc?: string) => void;
+  playSound: (soundSrc?: string, loop?: boolean) => void;
+  stopSound: (soundSrc?: string) => void;
 }
 
 export const useToyInteractions = (toy: ToyDefinition): ToyActionsAndState => {
@@ -52,13 +53,14 @@ export const useToyInteractions = (toy: ToyDefinition): ToyActionsAndState => {
   }, [toy]);
 
   const playSound = useCallback(
-    (soundSrc?: string) => {
+    (soundSrc?: string, loop = false) => {
       if (!soundSrc) {
         return;
       }
       const soundToPlay = audioElements.get(soundSrc);
 
       if (soundToPlay) {
+        soundToPlay.loop = loop;
         soundToPlay.currentTime = 0;
         soundToPlay.play().catch((error) => {
           if (error.name === "NotSupportedError") {
@@ -82,9 +84,22 @@ export const useToyInteractions = (toy: ToyDefinition): ToyActionsAndState => {
     [audioElements, toy.name]
   );
 
+  const stopSound = useCallback(
+    (soundSrc?: string) => {
+      if (!soundSrc) return;
+      const soundToStop = audioElements.get(soundSrc);
+      if (soundToStop) {
+        soundToStop.pause();
+        soundToStop.currentTime = 0;
+      }
+    },
+    [audioElements]
+  );
+
   return {
     currentImageSrc,
     setCurrentImageSrc,
     playSound,
+    stopSound,
   };
 };

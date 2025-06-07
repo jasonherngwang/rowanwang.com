@@ -17,15 +17,29 @@ export default function Home() {
             id="camel-path"
             fill="none"
             stroke="none"
-            d="M -100,500 C 400,100 800,900 1200,500 S 2000,100 2400,500"
+            d="M -400,500 C 100,100 500,900 900,500 S 1700,100 2100,500"
           />
           <path
             id="wang-path"
             fill="none"
             stroke="none"
-            d="M -100,550 C 400,150 800,950 1200,550 S 2000,150 2400,550"
+            d="M -400,550 C 100,150 500,950 900,550 S 1700,150 2100,550"
           />
           <text>
+            <motion.textPath
+              href="#wang-path"
+              className="font-bold text-9xl fill-mid-pine"
+              initial={{ startOffset: "100%" }}
+              animate={{ startOffset: "0%" }}
+              transition={{
+                duration: 15,
+                repeat: Infinity,
+                ease: "linear",
+                repeatType: "loop",
+              }}
+            >
+              wang
+            </motion.textPath>
             <motion.textPath
               href="#camel-path"
               className="font-bold text-9xl fill-peach"
@@ -39,20 +53,6 @@ export default function Home() {
               }}
             >
               rowan
-            </motion.textPath>
-            <motion.textPath
-              href="#wang-path"
-              className="font-bold text-9xl fill-dark-pine"
-              initial={{ startOffset: "100%" }}
-              animate={{ startOffset: "0%" }}
-              transition={{
-                duration: 15,
-                repeat: Infinity,
-                ease: "linear",
-                repeatType: "loop",
-              }}
-            >
-              wang
             </motion.textPath>
           </text>
         </svg>

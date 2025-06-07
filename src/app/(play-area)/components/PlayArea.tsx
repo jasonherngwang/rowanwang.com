@@ -7,7 +7,6 @@ import toyDefinitions, {
   Interaction,
   DragInteractionConfig,
   ClickInteractionConfig,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ToggleOnClickInteractionConfig,
 } from "../data/toy-definitions";
 import { useToyInteractions } from "../hooks/use-toy-interactions";
@@ -66,22 +65,20 @@ export default function PlayArea() {
     toyItemData,
     constraintsRef,
   }) => {
-    const { currentImageSrc, setCurrentImageSrc, playSound } =
+    const { currentImageSrc, setCurrentImageSrc, playSound, stopSound } =
       useToyInteractions(toyItemData);
 
     const [isBeingDragged, setIsBeingDragged] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isActive, setIsActive] = useState(false);
-
-    // Refs for managing animation sequences
-    // const animationTimeoutIdRef = useRef<NodeJS.Timeout | null>(null); // No longer needed for click animations
-    // const currentFrameIndexRef = useRef(0); // No longer needed for click animations
 
     // Refs for continuous drag animations (e.g., rattle)
     const continuousAnimationIntervalIdRef = useRef<NodeJS.Timeout | null>(
       null
     );
     const continuousAnimationFrameIndexRef = useRef(0);
+
+    // Ref for toggle animation
+    const toggleAnimationIntervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
     // Find specific interaction configurations
     const getDragConfig = useCallback((): DragInteractionConfig | undefined => {
@@ -100,23 +97,30 @@ export default function PlayArea() {
       );
     }, [toyItemData.interactions]);
 
+    const getToggleConfig = useCallback(():
+      | ToggleOnClickInteractionConfig
+      | undefined => {
+      return toyItemData.interactions.find(
+        (interaction): interaction is ToggleOnClickInteractionConfig =>
+          interaction.type === Interaction.TOGGLE_ON_CLICK
+      );
+    }, [toyItemData.interactions]);
+
     const clickConfig = getClickConfig();
     const hasVisualClickAnimation = !!(
       clickConfig?.animationOnClick?.images &&
       clickConfig.animationOnClick.images.length > 0
     );
 
-    // TODO: Add getToggleConfig if needed for TOGGLE_ON_CLICK
-
     // Cleanup animations on unmount or when toy changes
     useEffect(() => {
       return () => {
-        // if (animationTimeoutIdRef.current) { // Removed
-        //   clearTimeout(animationTimeoutIdRef.current); // Removed
-        // } // Removed
         if (continuousAnimationIntervalIdRef.current) {
           // For drag animations
           clearInterval(continuousAnimationIntervalIdRef.current);
+        }
+        if (toggleAnimationIntervalIdRef.current) {
+          clearInterval(toggleAnimationIntervalIdRef.current);
         }
       };
     }, []);
@@ -204,6 +208,12 @@ export default function PlayArea() {
       // This fires on pointer up if no drag occurred
       if (isBeingDragged) return;
 
+      const toggleConfig = getToggleConfig();
+      if (toggleConfig) {
+        setIsActive((prev) => !prev);
+        return;
+      }
+
       if (clickConfig) {
         // Sound was played on pointer down.
         // Revert the image to the second frame of the animation (if defined), or the base image.
@@ -228,26 +238,64 @@ export default function PlayArea() {
           }
         }
       }
-
-      // Placeholder to satisfy linter for isActive if it were used for toggle
-      if (isActive) {
-        // console.log("Toy is active - for toggleable interactions");
-      }
     };
 
     // useEffect for TOGGLE_ON_CLICK (e.g., piano)
-    // TODO: Implement this effect to handle isActive changes for toggleable toys
-    // This will manage looping sound & animation based on toggleConfig.
-    // useEffect(() => {
-    //   const toggleConfig = toyItemData.interactions.find(i => i.type === Interaction.TOGGLE_ON_CLICK) as ToggleOnClickInteractionConfig | undefined;
-    //   if (isActive && toggleConfig) {
-    //     // Start sound (loop if toggleConfig.loopSound)
-    //     // Start animation (loop if toggleConfig.loopAnimation - future)
-    //   } else {
-    //     // Stop sound & animation
-    //   }
-    //   return () => { /* cleanup */ };
-    // }, [isActive, toyItemData.interactions, प्लेSound, setCurrentImageSrc]);
+    useEffect(() => {
+      const toggleConfig = getToggleConfig();
+      if (!toggleConfig) return;
+
+      if (isActive) {
+        // Start animation and sound
+        playSound(toggleConfig.sound, toggleConfig.loopSound);
+
+        const { animationImages } = toggleConfig;
+        if (animationImages.length === 0) return;
+
+        let frameIndex = 0;
+        // TODO: Make this configurable
+        const animationFrameDuration = 500;
+
+        const animate = () => {
+          frameIndex = (frameIndex + 1) % animationImages.length;
+          setCurrentImageSrc(animationImages[frameIndex]);
+        };
+
+        // Set initial frame and start interval
+        setCurrentImageSrc(animationImages[0]);
+        toggleAnimationIntervalIdRef.current = setInterval(
+          animate,
+          animationFrameDuration
+        );
+      } else {
+        // Stop animation and sound
+        stopSound(toggleConfig.sound);
+
+        if (toggleAnimationIntervalIdRef.current) {
+          clearInterval(toggleAnimationIntervalIdRef.current);
+          toggleAnimationIntervalIdRef.current = null;
+        }
+        // Revert to base image
+        setCurrentImageSrc(toyItemData.imageSrc);
+      }
+
+      // Cleanup function
+      return () => {
+        if (toggleConfig.sound) {
+          stopSound(toggleConfig.sound);
+        }
+        if (toggleAnimationIntervalIdRef.current) {
+          clearInterval(toggleAnimationIntervalIdRef.current);
+        }
+      };
+    }, [
+      isActive,
+      getToggleConfig,
+      playSound,
+      stopSound,
+      setCurrentImageSrc,
+      toyItemData.imageSrc,
+    ]);
 
     return (
       <Toy

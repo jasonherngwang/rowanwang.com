@@ -52,11 +52,12 @@ const toyDefinitions: ToyDefinition[] = [
     id: "rattle",
     name: "Rattle",
     imageSrc: "/assets/toys/rattle.png",
-    size: { width: 200, height: 200 },
+    size: { width: 250, height: 250 },
     altText: "Rowan's music instrument",
     baseZIndex: 20,
     interactions: [
-      { type: Interaction.DRAG,
+      {
+        type: Interaction.DRAG,
         animationWhileDragging: {
           images: [
             // Note: imageSrc is the base. These are the animation cycle.
@@ -64,37 +65,36 @@ const toyDefinitions: ToyDefinition[] = [
             "/assets/toys/rattle_left.png",
           ],
           sound: "/assets/sounds/rattle.mp3",
-        }
-      }
+        },
+      },
     ],
   },
-  // {
-  //   id: "piano1",
-  //   name: "Kick-and-Play Piano",
-  //   imageSrc: "/assets/toys/piano.png",
-  //   size: { width: 200, height: 120 },
-  //   altText: "A kick-and-play piano toy",
-  //   baseZIndex: 20,
-  //   interactions: [
-  //     { type: Interaction.DRAG }, // Allow dragging
-  //     {
-  //       type: Interaction.TOGGLE_ON_CLICK,
-  //       sound: "/assets/sounds/piano-music.mp3",
-  //       animationImages: [
-  //         "/assets/toys/piano.png", // Base image
-  //         "/assets/toys/piano-light1.png",
-  //         "/assets/toys/piano-light2.png",
-  //         "/assets/toys/piano-light3.png",
-  //       ],
-  //       loopSound: true,
-  //     },
-  //   ],
-  // },
+  {
+    id: "piano",
+    name: "Kick Piano",
+    imageSrc: "/assets/toys/piano.png",
+    size: { width: 400, height: 240 },
+    altText: "A kick-and-play piano toy",
+    baseZIndex: 20,
+    interactions: [
+      {
+        type: Interaction.TOGGLE_ON_CLICK,
+        sound: "/assets/sounds/animal-count.mp3",
+        animationImages: [
+          "/assets/toys/piano.png",
+          "/assets/toys/piano-orange.png",
+          "/assets/toys/piano-green.png",
+          "/assets/toys/piano-red.png",
+        ],
+        loopSound: true,
+      },
+    ],
+  },
   {
     id: "camel",
     name: "Camel",
     imageSrc: "/assets/toys/camel.png",
-    size: { width: 220, height: 220 },
+    size: { width: 250, height: 250 },
     altText: "A plush camel toy",
     baseZIndex: 20,
     interactions: [
@@ -129,7 +129,26 @@ const toyDefinitions: ToyDefinition[] = [
         // Optional: For a quick squish-and-revert animation on click:
         animationOnClick: {
           images: ["/assets/toys/seal_squish.png", "/assets/toys/seal.png"],
-        }
+        },
+      },
+    ],
+  },
+  {
+    id: "squirrel",
+    name: "Squirrel",
+    imageSrc: "/assets/toys/squirrel.png",
+    size: { width: 200, height: 200 },
+    altText: "A sneaky snacky squirrel",
+    baseZIndex: 20,
+    interactions: [
+      {
+        type: Interaction.DRAG,
+        soundOnDragStart: "/assets/sounds/squirrel_chitter.mp3",
+        imageWhileDragging: "/assets/toys/squirrel.png",
+      },
+      {
+        type: Interaction.CLICK,
+        soundOnClick: "/assets/sounds/squirrel_chitter.mp3",
       },
     ],
   },
