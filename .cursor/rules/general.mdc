@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Implementation Rules
+
+## Environment
+
+- Project: `react`
+- Framework: `tailwindcss`, `shadcn`, `nextjs`
+- Package Manager: `bun`
+- Bundler: `bunx`
+
+## General folder structure
+
+- `api/`: API endpoints
+- `public/`: Static assets
+  - `assets/`: Videos, sounds, media
+  - `fonts/`: Fonts
+- `src/`: Source code
+  - `app/`: Home page and individual applications
+    - Each app has its own directory with components, hooks, and utilities
+    - `(app-name)/`: Individual applications
+  - `components/`: Shared React components
+    - `providers/`: React context providers
+    - `theme/`: Light and dark theme toggle
+    - `ui/`: UI components (shadcn components)
+  - `config/`: Configuration files
+  - `lib/`: Libraries and utilities
+    - Authentication using `better-auth`
+    - `db/`: Database management using `neondatabase` and `drizzle` ORM
+  - `styles/`: CSS and styling utilities
+  - `types/`: TypeScript type definitions
+
+### App Structure
+
+- App components follow the naming convention `[AppName]AppComponent.tsx`
+- Apps are organized in `src/app/[app-name]/` directories
+- Each app folder typically contains:
+  - `components/`: App-specific components
+  - `hooks/`: Custom hooks specific to the app
+  - `utils/`: Utility functions for the app
+- The main app component is exported from `src/app/[app-name]/index.tsx`
+
+### Component Organization
+
+- Shared UI components from `@/components/ui/` follow shadcn patterns
