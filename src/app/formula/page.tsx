@@ -26,8 +26,8 @@ export default function FormulaCalculatorPage() {
   const formulaGrams = totalGrams - waterGrams;
 
   return (
-    <div className="flex w-full min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="flex w-full min-h-screen items-start justify-center p-4">
+      <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Baby Formula Calculator</CardTitle>
           <CardDescription>

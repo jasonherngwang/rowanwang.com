@@ -1,4 +1,8 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, jsonb } from "drizzle-orm/pg-core";
+import type { InferSelectModel } from "drizzle-orm";
+
+export const permissions = ["AI_ACCESS"] as const;
+export type Permission = (typeof permissions)[number];
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -6,9 +10,12 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
+  permissions: jsonb("permissions").$type<Permission[] | null>().default([]),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
+
+export type User = InferSelectModel<typeof user>;
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),

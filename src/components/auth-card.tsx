@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function AuthCard({
   title,
@@ -26,6 +27,8 @@ export default function AuthCard({
   mode?: "sign-in" | "sign-up";
 }) {
   const [googleLoading, setGoogleLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirectUrl");
 
   return (
     <Card className="max-w-md w-full rounded-none border-dashed">
@@ -48,7 +51,7 @@ export default function AuthCard({
               provider="google"
               loading={googleLoading}
               setLoading={setGoogleLoading}
-              callbackURL="/dashboard"
+              callbackURL={redirectUrl || "/dashboard"}
               icon={<Icons.Google />}
             />
           </div>

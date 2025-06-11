@@ -3,6 +3,8 @@ import { z } from "zod";
  
 export const env = createEnv({
   server: {
+    // Superuser
+    SUPERUSER_EMAIL: z.string().email(),
     // BetterAuth
     BETTER_AUTH_URL: z.string().min(1),
     BETTER_AUTH_SECRET: z.string().min(1),

@@ -8,6 +8,34 @@
       "when": 1747230620435,
       "tag": "0000_deep_obadiah_stane",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749426573906,
+      "tag": "0001_ambiguous_weapon_omega",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749427504194,
+      "tag": "0002_black_whistler",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1749427551230,
+      "tag": "0003_married_yellow_claw",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1749615472908,
+      "tag": "0004_black_human_robot",
+      "breakpoints": true
     }
   ]
 }

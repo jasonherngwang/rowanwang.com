@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-const protectedRoutes = ["/dashboard"];
+const protectedRoutes = ["/dashboard", "/camelchords"];
+const publicRoutes = ["/camelchords/public"];
 const authRoutes = ["/sign-in", "/sign-up"];
 
 export async function middleware(request: NextRequest) {
@@ -12,9 +13,15 @@ export async function middleware(request: NextRequest) {
     
     const { pathname } = request.nextUrl;
     
+    if (publicRoutes.some(route => pathname.startsWith(route))) {
+        return NextResponse.next();
+    }
+    
     // If user is not authenticated and trying to access protected route
     if (!session && protectedRoutes.some(route => pathname.startsWith(route))) {
-        return NextResponse.redirect(new URL("/sign-in", request.url));
+        const signInUrl = new URL("/sign-in", request.url);
+        signInUrl.searchParams.set("redirectUrl", pathname);
+        return NextResponse.redirect(signInUrl);
     }
     
     // If user is authenticated but trying to access auth routes
