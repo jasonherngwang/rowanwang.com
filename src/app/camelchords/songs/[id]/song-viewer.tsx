@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { LibraryContext } from "@/app/camelchords/hooks/useLibrary";
 import { parseSongContent, ContentBlock } from "@/app/camelchords/utils/parser";
 import CreateSongForm from "@/app/camelchords/create-song/create-song-form";
 import { Song } from "@/lib/db/schema/camelchords";
@@ -9,25 +8,15 @@ import { Button } from "@/components/ui/button";
 import { UkuleleChordDiagram } from "./chord-diagram";
 
 interface SongEditorProps {
-  songId: string;
+  song: Song;
 }
 
-export const SongViewer = ({ songId }: SongEditorProps) => {
-  const libraryContext = React.useContext(LibraryContext);
-  const selectedSong = libraryContext.libraries
-    .flatMap((library) => library.songs)
-    .find((song) => song.id?.toString() === songId);
-  const parsedSong = parseSongContent(selectedSong?.content);
+export const SongViewer = ({ song }: SongEditorProps) => {
+  const parsedSong = parseSongContent(song?.content);
 
   const [isEditing, setIsEditing] = React.useState(false);
-  const [currentSong, setCurrentSong] = React.useState<Song | null>(null);
-  React.useEffect(() => {
-    if (selectedSong) {
-      setCurrentSong(selectedSong);
-    }
-  }, [selectedSong]);
 
-  if (!selectedSong || !currentSong || !parsedSong) {
+  if (!song || !parsedSong) {
     return null;
   }
 
@@ -36,7 +25,7 @@ export const SongViewer = ({ songId }: SongEditorProps) => {
       <div>
         {isEditing ? (
           <div className="flex flex-col gap-3">
-            <CreateSongForm mode="update" song={currentSong} />
+            <CreateSongForm mode="update" song={song} />
             <Button
               onClick={() => setIsEditing(false)}
               className="cursor-pointer"
@@ -47,7 +36,7 @@ export const SongViewer = ({ songId }: SongEditorProps) => {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <div className="text-3xl">{selectedSong.name}</div>
+            <div className="text-3xl">{song.name}</div>
             <div>
               <SongReadOnly parsedSong={parsedSong} />
               <Button
