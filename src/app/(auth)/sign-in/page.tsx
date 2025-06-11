@@ -1,9 +1,10 @@
-"use client"
-
-import AuthCard from "@/components/auth-card"
+import { Suspense } from "react";
+import SignInForm from "./components/sign-in-form";
 
 export default function SignInPage() {
     return (
-        <AuthCard title="Sign in" description="Sign in to your account using your preferred provider" mode="sign-in" />
+        <Suspense fallback={<div>Loading...</div>}>
+            <SignInForm />
+        </Suspense>
     )
 }

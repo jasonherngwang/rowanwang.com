@@ -1,9 +1,10 @@
-"use client"
-
-import AuthCard from "@/components/auth-card"
+import { Suspense } from "react";
+import SignUpForm from "./components/sign-up-form";
 
 export default function SignUpPage() {
     return (
-        <AuthCard title="Sign up" description="Sign up to your account using your preferred provider" mode="sign-up" />
+        <Suspense fallback={<div>Loading...</div>}>
+            <SignUpForm />
+        </Suspense>
     )
 }

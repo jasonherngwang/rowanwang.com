@@ -10,7 +10,7 @@ import { headers } from "next/headers";
 
 async function checkOwnership(songId: number) {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) return false;
+  if (!session || !session.user) return false;
 
   const { song } = await getSong(songId);
   if (!song) return false;
@@ -21,10 +21,8 @@ async function checkOwnership(songId: number) {
   return library.userId === session.user.id;
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const isOwner = await checkOwnership(Number(params.id));
   if (!isOwner) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -40,10 +38,8 @@ export async function PUT(
   return NextResponse.json(result);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const isOwner = await checkOwnership(Number(params.id));
   if (!isOwner) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

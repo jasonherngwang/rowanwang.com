@@ -3,7 +3,7 @@
 import * as React from "react";
 import { LibraryContext } from "@/app/camelchords/hooks/useLibrary";
 import { parseSongContent, ContentBlock } from "@/app/camelchords/utils/parser";
-import CreateSongPage from "@/app/camelchords/create-song/page";
+import CreateSongForm from "@/app/camelchords/create-song/create-song-form";
 import { Song } from "@/lib/db/schema/camelchords";
 import { Button } from "@/components/ui/button";
 import { UkuleleChordDiagram } from "./chord-diagram";
@@ -36,7 +36,7 @@ export const SongViewer = ({ songId }: SongEditorProps) => {
       <div>
         {isEditing ? (
           <div className="flex flex-col gap-3">
-            <CreateSongPage mode="update" song={currentSong} />
+            <CreateSongForm mode="update" song={currentSong} />
             <Button
               onClick={() => setIsEditing(false)}
               className="cursor-pointer"
