@@ -67,7 +67,7 @@ export function CamelchordsBreadcrumb() {
     <Breadcrumb>
       <BreadcrumbList>
         {song ? (
-            <BreadcrumbItem className="hidden md:block">
+            <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                 <Link href={`/camelchords/libraries/${library.id}`}>
                     {library.name}
@@ -82,7 +82,7 @@ export function CamelchordsBreadcrumb() {
         
         {song && (
           <>
-            <BreadcrumbSeparator className="hidden md:block" />
+            <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage>{song.name}</BreadcrumbPage>
             </BreadcrumbItem>

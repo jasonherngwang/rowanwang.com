@@ -49,7 +49,7 @@ export default async function LibraryLayout({
               <CamelchordsBreadcrumb />
             </div>
           </header>
-          <div className="px-16 pb-16">{children}</div>
+          <div className="px-8 pb-8 md:px-16 md:pb-16">{children}</div>
         </SidebarInset>
       </SidebarProvider>
     </LibraryProvider>
