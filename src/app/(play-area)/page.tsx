@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { UserProfile } from "@/components/user-profile";
+import { Button } from "@/components/ui/button";
 import PlayArea from "./components/PlayArea";
 import { motion } from "framer-motion";
 
@@ -14,7 +16,7 @@ export default function Home() {
           preserveAspectRatio="xMidYMid slice"
         >
           <path
-            id="camel-path"
+            id="rowan-path"
             fill="none"
             stroke="none"
             d="M -400,500 C 100,100 500,900 900,500 S 1700,100 2100,500"
@@ -41,7 +43,7 @@ export default function Home() {
               wang
             </motion.textPath>
             <motion.textPath
-              href="#camel-path"
+              href="#rowan-path"
               className="font-bold text-9xl fill-peach"
               initial={{ startOffset: "0%" }}
               animate={{ startOffset: "100%" }}
@@ -59,6 +61,14 @@ export default function Home() {
       </div>
 
       <PlayArea />
+      <div className="absolute bottom-10 flex space-x-4">
+        <Button asChild variant="link" className="text-xl text-light-peach">
+          <Link href="/formula">Formula</Link>
+        </Button>
+        <Button asChild variant="link" className="text-xl text-light-peach">
+          <Link href="/camelchords">CamelChords</Link>
+        </Button>
+      </div>
       {/* <UserProfile className="size-16" /> */}
     </div>
   );

@@ -57,7 +57,7 @@ export const SongEditor = React.forwardRef<SongEditorRef, SongEditorProps>(
               required
               minLength={1}
               placeholder="Enter the song name."
-              className="text-text"
+              className="text-foreground"
             />
           </div>
           <div className="grid gap-3">
@@ -70,7 +70,7 @@ export const SongEditor = React.forwardRef<SongEditorRef, SongEditorProps>(
               required
               minLength={1}
               placeholder="Enter chords and lyrics in ChordPro format."
-              className="min-h-80 text-text"
+              className="min-h-80 text-foreground"
             />
             {state?.error && (
               <div className="text-red-500 text-sm">{state.error}</div>
