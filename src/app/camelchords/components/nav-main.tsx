@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import { LibraryContext } from "../hooks/useLibrary";
 import {
   createLibrary,
@@ -43,13 +42,12 @@ import {
 
 export function NavMain({ user }: { user: User | null | undefined }) {
   const { libraries } = React.useContext(LibraryContext);
-  const router = useRouter();
 
   const handleCreateLibrary = async () => {
     if (!user) return;
     const name = prompt("Enter new library name:");
     if (name) {
-      await createLibrary({ name, userId: user.id });
+      await createLibrary({ name });
     }
   };
 

@@ -20,7 +20,6 @@ export async function createSongAction(
   const result = await createSong({
     name,
     content,
-    userId: session.user.id,
     libraryId: libraryId ? Number(libraryId) : undefined,
   });
 
