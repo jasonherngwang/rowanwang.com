@@ -20,12 +20,12 @@ export function CamelchordsBreadcrumb() {
 
   const pathParts = pathname.split("/").filter(Boolean);
 
-  if (pathParts[0] !== 'camelchords') {
+  if (pathParts[0] !== "camelchords") {
     return null;
   }
 
   // Handle /camelchords/create-song
-  if (pathParts[1] === 'create-song') {
+  if (pathParts[1] === "create-song") {
     return (
       <Breadcrumb>
         <BreadcrumbList>
@@ -34,7 +34,7 @@ export function CamelchordsBreadcrumb() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-    )
+    );
   }
 
   let library: LibraryWithSongs | undefined;
@@ -67,19 +67,15 @@ export function CamelchordsBreadcrumb() {
     <Breadcrumb>
       <BreadcrumbList>
         {song ? (
-            <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                <Link href={`/camelchords/libraries/${library.id}`}>
-                    {library.name}
-                </Link>
-                </BreadcrumbLink>
-            </BreadcrumbItem>
+          <BreadcrumbItem>
+            <span>{library.name}</span>
+          </BreadcrumbItem>
         ) : (
-            <BreadcrumbItem>
-                <BreadcrumbPage>{library.name}</BreadcrumbPage>
-            </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbPage>{library.name}</BreadcrumbPage>
+          </BreadcrumbItem>
         )}
-        
+
         {song && (
           <>
             <BreadcrumbSeparator />
@@ -91,4 +87,4 @@ export function CamelchordsBreadcrumb() {
       </BreadcrumbList>
     </Breadcrumb>
   );
-} 
+}

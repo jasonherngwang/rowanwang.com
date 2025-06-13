@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSongs, createSong } from "@/app/camelchords/utils/actions";
+import {
+  getSongs,
+  createSong,
+  getLibrary,
+} from "@/app/camelchords/utils/actions";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 export async function GET(request: NextRequest) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session || !session.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const libraryId = searchParams.get("libraryId");
 
@@ -12,6 +21,19 @@ export async function GET(request: NextRequest) {
       { error: "libraryId is required" },
       { status: 400 }
     );
+  }
+
+  const libraryResult = await getLibrary(Number(libraryId));
+
+  if (libraryResult.error) {
+    return NextResponse.json(
+      { error: libraryResult.error },
+      { status: 400 }
+    );
+  }
+
+  if (libraryResult.library?.userId !== session.user.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const songsResult = await getSongs(Number(libraryId));

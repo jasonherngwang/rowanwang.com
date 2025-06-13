@@ -32,17 +32,22 @@ const getOrCreateLibrary = async (userId: string) => {
 const createSongSchema = z.object({
   name: z.string(),
   content: z.string(),
-  userId: z.string(),
   libraryId: z.number().optional(),
 });
 
-export const createSong = async (data: z.infer<typeof createSongSchema>) => {
-  let { name, content, libraryId, userId } = data;
+export const createSong = async (
+  data: Omit<z.infer<typeof createSongSchema>, "userId">
+) => {
+  const user = await getUser();
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+  let { name, content, libraryId } = data;
   let createdSongId;
 
   try {
     if (!libraryId) {
-      const library = await getOrCreateLibrary(userId);
+      const library = await getOrCreateLibrary(user.id);
       libraryId = library.id;
     }
 
@@ -91,6 +96,11 @@ const updateSongSchema = z.object({
 });
 
 export const updateSong = async (data: z.infer<typeof updateSongSchema>) => {
+  const user = await getUser();
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
   const id = Number(data.id);
   const { name, content } = data;
 
@@ -103,6 +113,20 @@ export const updateSong = async (data: z.infer<typeof updateSongSchema>) => {
   }
 
   try {
+    const { song } = await getSong(id);
+    if (!song) {
+      return {
+        error: "Song not found.",
+        name,
+        content,
+      };
+    }
+
+    const { library } = await getLibrary(song.libraryId);
+    if (!library || library.userId !== user.id) {
+      return { error: "Unauthorized" };
+    }
+
     const existingSong = await db
       .select()
       .from(songs)
@@ -142,6 +166,11 @@ export const updateSong = async (data: z.infer<typeof updateSongSchema>) => {
 };
 
 export const deleteSong = async (songId: number) => {
+  const user = await getUser();
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
   if (isNaN(songId)) {
     return {
       error: "Invalid song ID",
@@ -149,6 +178,16 @@ export const deleteSong = async (songId: number) => {
   }
 
   try {
+    const { song } = await getSong(songId);
+    if (!song) {
+      return { error: "Song not found." };
+    }
+
+    const { library } = await getLibrary(song.libraryId);
+    if (!library || library.userId !== user.id) {
+      return { error: "Unauthorized" };
+    }
+
     await db.delete(songs).where(eq(songs.id, songId)).returning();
   } catch (error) {
     console.error("Error deleting song:", error);
@@ -222,14 +261,33 @@ export const getLibrariesWithSongs = async (
   }
 };
 
-export const createLibrary = async (data: { name: string; userId: string }) => {
-  const [newLibrary] = await db.insert(libraries).values(data).returning();
+export const createLibrary = async (data: { name: string }) => {
+  const user = await getUser();
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
+  const [newLibrary] = await db
+    .insert(libraries)
+    .values({ ...data, userId: user.id })
+    .returning();
   revalidatePath("/camelchords");
   return { library: newLibrary };
 };
 
 export const updateLibrary = async (data: { id: number; name: string }) => {
+  const user = await getUser();
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
   const { id, name } = data;
+
+  const { library } = await getLibrary(id);
+  if (!library || library.userId !== user.id) {
+    return { error: "Unauthorized" };
+  }
+
   const [updatedLibrary] = await db
     .update(libraries)
     .set({ name })
@@ -240,6 +298,16 @@ export const updateLibrary = async (data: { id: number; name: string }) => {
 };
 
 export const deleteLibrary = async (libraryId: number) => {
+  const user = await getUser();
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
+  const { library } = await getLibrary(libraryId);
+  if (!library || library.userId !== user.id) {
+    return { error: "Unauthorized" };
+  }
+
   await db.delete(libraries).where(eq(libraries.id, libraryId));
   revalidatePath("/camelchords");
   return { success: true };

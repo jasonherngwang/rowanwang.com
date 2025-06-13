@@ -86,7 +86,7 @@ export function NavMain({ user }: { user: User | null | undefined }) {
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="p-1 opacity-0 transition-opacity group-hover:opacity-100">
+                      <button className="p-1">
                         <Pencil size={16} />
                       </button>
                     </DropdownMenuTrigger>
