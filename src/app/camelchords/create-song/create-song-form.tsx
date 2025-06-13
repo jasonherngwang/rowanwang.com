@@ -170,7 +170,7 @@ ${songFormatPrompt}`;
               ? "Describe the song you want to generate..."
               : "Describe the changes you want..."
           }
-          className="min-h-24 text-text"
+          className="min-h-24 text-foreground"
           disabled={disableInteraction}
         />
         <div className="flex gap-x-2 justify-start">

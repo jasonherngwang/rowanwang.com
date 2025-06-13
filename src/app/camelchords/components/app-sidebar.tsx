@@ -6,6 +6,7 @@ import { Guitar, Home } from "lucide-react";
 
 import { NavMain } from "@/app/camelchords/components/nav-main";
 import { NavUser } from "@/app/camelchords/components/nav-user";
+import ThemeToggler from "@/components/theme/toggler";
 import {
   Sidebar,
   SidebarContent,
@@ -28,7 +29,7 @@ export function AppSidebar({
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/camelchords">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                <div className="bg-sidebar-primary dark:bg-pine text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Guitar className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -50,11 +51,18 @@ export function AppSidebar({
       <SidebarContent>
         <NavMain user={user} />
       </SidebarContent>
-      {user && (
-        <SidebarFooter>
-          <NavUser user={user} />
-        </SidebarFooter>
-      )}
+      <SidebarFooter>
+        <SidebarMenu className="flex-col gap- ">
+          <SidebarMenuItem>
+              <ThemeToggler className="cursor-pointer" />
+          </SidebarMenuItem>
+          {user && (
+            <SidebarMenuItem>
+              <NavUser user={user} />
+            </SidebarMenuItem>
+          )}
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
