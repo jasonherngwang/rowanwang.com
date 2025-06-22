@@ -5,10 +5,26 @@ import { UserProfile } from "@/components/user-profile";
 import { Button } from "@/components/ui/button";
 import PlayArea from "./components/PlayArea";
 import { motion } from "framer-motion";
+import ThemeToggler from "@/components/theme/toggler";
 
 export default function Home() {
   return (
     <div className="w-full h-screen overflow-hidden flex flex-col items-center justify-center relative">
+      <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between">
+        <div className="flex justify-center gap-1">
+          <Button asChild variant="link" className="text-sm text-light-peach">
+            <Link href="/formula">Formula</Link>
+          </Button>
+          <Button asChild variant="link" className="text-sm text-light-peach">
+            <Link href="/camelchords">CamelChords</Link>
+          </Button>
+        </div>
+        <div className="flex items-center">
+          <UserProfile className="text-sm text-light-peach" />
+          <ThemeToggler showText={false} />
+        </div>
+      </div>
+
       <div className="absolute inset-0">
         <svg
           className="w-full h-full"
@@ -61,15 +77,6 @@ export default function Home() {
       </div>
 
       <PlayArea />
-      <div className="absolute bottom-10 flex space-x-4">
-        <Button asChild variant="link" className="text-xl text-light-peach">
-          <Link href="/formula">Formula</Link>
-        </Button>
-        <Button asChild variant="link" className="text-xl text-light-peach">
-          <Link href="/camelchords">CamelChords</Link>
-        </Button>
-      </div>
-      {/* <UserProfile className="size-16" /> */}
     </div>
   );
 }

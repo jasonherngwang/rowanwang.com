@@ -28,6 +28,7 @@ export const SongEditor = React.forwardRef<SongEditorRef, SongEditorProps>(
   ({ mode, state, formAction, pending, song, libraryId }, ref) => {
     const nameRef = React.useRef<HTMLInputElement>(null);
     const contentRef = React.useRef<HTMLTextAreaElement>(null);
+    const [isDeleting, setIsDeleting] = React.useState(false);
 
     React.useImperativeHandle(ref, () => ({
       nameRef,
@@ -77,7 +78,11 @@ export const SongEditor = React.forwardRef<SongEditorRef, SongEditorProps>(
             )}
           </div>
           <div className="flex gap-x-2 justify-start">
-            <Button type="submit" disabled={pending} className="cursor-pointer">
+            <Button
+              type="submit"
+              disabled={pending || isDeleting}
+              className="w-36 cursor-pointer"
+            >
               {pending ? (
                 <>
                   <Loader2 className="animate-spin mr-2 h-4 w-4" />
@@ -96,17 +101,19 @@ export const SongEditor = React.forwardRef<SongEditorRef, SongEditorProps>(
                   if (
                     window.confirm("Are you sure you want to delete this song?")
                   ) {
+                    setIsDeleting(true);
                     const result = await deleteSong(song.id);
                     if (result?.error) {
                       console.error("Delete failed:", result.error);
+                      setIsDeleting(false);
                     }
                   }
                 }}
-                disabled={pending}
-                className="cursor-pointer"
+                disabled={pending || isDeleting}
+                className="w-36 cursor-pointer"
                 variant="destructive"
               >
-                {pending ? (
+                {isDeleting ? (
                   <>
                     <Loader2 className="animate-spin mr-2 h-4 w-4" />
                     Loading...

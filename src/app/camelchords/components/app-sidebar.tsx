@@ -54,7 +54,7 @@ export function AppSidebar({
       <SidebarFooter>
         <SidebarMenu className="flex-col gap- ">
           <SidebarMenuItem>
-              <ThemeToggler className="cursor-pointer" />
+              <ThemeToggler className="cursor-pointer" showText={true} />
           </SidebarMenuItem>
           {user && (
             <SidebarMenuItem>

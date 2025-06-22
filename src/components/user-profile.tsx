@@ -32,7 +32,11 @@ export function UserProfile({ className }: { className?: string }) {
   }
 
   if (!session) {
-    return null;
+    return (
+      <Button asChild variant="link" className={className}>
+        <Link href="/sign-in">Sign In</Link>
+      </Button>
+    );
   }
 
   return (
@@ -80,33 +84,6 @@ export function UserProfile({ className }: { className?: string }) {
             </Avatar>
           </div>
         </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" asChild>
-          <Link href="/dashboard">Dashboard</Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" asChild>
-          <a
-            href={siteConfig.socials.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-between gap-2"
-          >
-            <span>Github</span>
-            <ExternalLinkIcon className="size-4" />
-          </a>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer" asChild>
-          <a
-            href={siteConfig.socials.x}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-between gap-2"
-          >
-            <span>X</span>
-            <ExternalLinkIcon className="size-4" />
-          </a>
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer w-full flex items-center justify-between gap-2"

@@ -24,14 +24,14 @@ export const SongViewer = ({ song }: SongEditorProps) => {
     <div>
       <div>
         {isEditing ? (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-6">
             <CreateSongForm mode="update" song={song} />
             <Button
               onClick={() => setIsEditing(false)}
-              className="cursor-pointer"
+              className="w-36 cursor-pointer"
               variant="outline"
             >
-              Cancel
+              Cancel edit
             </Button>
           </div>
         ) : (
@@ -41,7 +41,7 @@ export const SongViewer = ({ song }: SongEditorProps) => {
               <SongReadOnly parsedSong={parsedSong} />
               <Button
                 onClick={() => setIsEditing(true)}
-                className="mt-8 cursor-pointer"
+                className="mt-8 w-36 cursor-pointer"
               >
                 Edit
               </Button>

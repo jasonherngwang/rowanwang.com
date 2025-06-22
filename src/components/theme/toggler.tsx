@@ -7,9 +7,13 @@ import { cn } from "@/lib/utils";
 
 type ThemeTogglerProps = {
   className?: string;
+  showText?: boolean;
 };
 
-export default function ThemeToggler({ className }: ThemeTogglerProps) {
+export default function ThemeToggler({
+  className,
+  showText,
+}: ThemeTogglerProps) {
   const { resolvedTheme, setTheme } = useTheme();
 
   const switchTheme = () => {
@@ -28,11 +32,11 @@ export default function ThemeToggler({ className }: ThemeTogglerProps) {
     <Button
       onClick={toggleTheme}
       variant="ghost"
-      className={cn("w-full justify-start", className)}
+      className={cn(`${showText ? "w-full justify-start" : "'"}`, className)}
     >
       <SunIcon className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <MoonIcon className="absolute size-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span className="ml-2">Toggle theme</span>
+      {showText && <span className="ml-2">Toggle theme</span>}
       <span className="sr-only">Toggle theme</span>
     </Button>
   );

@@ -178,7 +178,7 @@ ${songFormatPrompt}`;
             type="button"
             onClick={generateSong}
             disabled={disableInteraction || !songPrompt}
-            className="cursor-pointer"
+            className="w-36 cursor-pointer"
           >
             {generationPending ? (
               <>
