@@ -15,7 +15,10 @@ export const libraries = camelchordsSchema.table("libraries", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -27,7 +30,10 @@ export const songs = camelchordsSchema.table("songs", {
   content: text("content").notNull(),
   isPublic: boolean("is_public").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
   libraryId: integer("library_id")
     .notNull()
     .references(() => libraries.id, { onDelete: "cascade" }),
