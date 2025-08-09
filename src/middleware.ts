@@ -19,6 +19,13 @@ export async function middleware(request: NextRequest) {
     
     // If user is not authenticated and trying to access protected route
     if (!session && protectedRoutes.some(route => pathname.startsWith(route))) {
+        // For CamelChords, send unauthenticated users to the public demo
+        if (pathname.startsWith('/camelchords')) {
+            const demoUrl = new URL("/camelchords/public", request.url);
+            return NextResponse.redirect(demoUrl);
+        }
+
+        // For other protected routes, send to sign-in
         const signInUrl = new URL("/sign-in", request.url);
         signInUrl.searchParams.set("redirectUrl", pathname);
         return NextResponse.redirect(signInUrl);

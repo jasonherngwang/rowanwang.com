@@ -68,9 +68,11 @@ export function NavMain({ user }: { user: User | null | undefined }) {
     <SidebarGroup>
       <div className="flex items-center justify-between">
         <SidebarGroupLabel>Libraries</SidebarGroupLabel>
-        <button onClick={handleCreateLibrary} className="pr-4">
-          <PlusIcon size={16} />
-        </button>
+        {user && (
+          <button onClick={handleCreateLibrary} className="pr-4">
+            <PlusIcon size={16} />
+          </button>
+        )}
       </div>
       <SidebarMenu>
         {libraries?.map((library) => (
@@ -82,28 +84,30 @@ export function NavMain({ user }: { user: User | null | undefined }) {
                     <Library />
                     <span>{library.name}</span>
                   </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button className="p-1">
-                        <Pencil size={16} />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent sideOffset={8} align="start">
-                      <DropdownMenuItem
-                        onClick={() => handleRenameLibrary(library.id)}
-                      >
-                        <Pencil size={14} className="mr-2" />
-                        Rename
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => handleDeleteLibrary(library.id)}
-                        className="text-red-500"
-                      >
-                        <Trash2 size={14} className="mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  {user && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="p-1">
+                          <Pencil size={16} />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent sideOffset={8} align="start">
+                        <DropdownMenuItem
+                          onClick={() => handleRenameLibrary(library.id)}
+                        >
+                          <Pencil size={14} className="mr-2" />
+                          Rename
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleDeleteLibrary(library.id)}
+                          className="text-red-500"
+                        >
+                          <Trash2 size={14} className="mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
                 </div>
               </SidebarMenuButton>
               <CollapsibleTrigger asChild>
@@ -123,16 +127,18 @@ export function NavMain({ user }: { user: User | null | undefined }) {
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton asChild>
-                      <a
-                        href={`/camelchords/create-song?libraryId=${library.id}`}
-                      >
-                        <PlusIcon className="stroke-primary" />
-                        <span>Create song</span>
-                      </a>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
+                  {user && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <a
+                          href={`/camelchords/create-song?libraryId=${library.id}`}
+                        >
+                          <PlusIcon className="stroke-primary" />
+                          <span>Create song</span>
+                        </a>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>
